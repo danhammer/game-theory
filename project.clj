@@ -4,6 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :resources-path "resources"
+  :source-paths ["src/clj"]
   :repositories {"conjars" "http://conjars.org/repo/"}
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [org.clojure/math.numeric-tower "0.0.1"]
