@@ -1,7 +1,11 @@
 game-theory
 ===========
 
-Game theory in Clojure
+Game theory in Clojure.  This project follows the text [A Course in
+Game
+Theory](http://www.amazon.com/Course-Game-Theory-Martin-Osborne/dp/0262650401)
+used for the game theory sequence through the Berkeley economics
+department.
 
 ## core namespace
 
