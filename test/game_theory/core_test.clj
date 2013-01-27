@@ -3,7 +3,9 @@
         game-theory.core))
 
 (def prisoners-dilemma
-  (game 2 [[:confess :deny] [:confess :deny]]
+  (game 2
+        [[:confess :deny] [:confess :deny]]
+
         [[:confess :confess] [1, 1]]
         [[:confess :deny]    [4, 0]]
         [[:deny :confess]    [0, 4]]
