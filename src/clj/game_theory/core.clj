@@ -63,7 +63,7 @@
   (or (and a b)
       (and (not a) (not b))))
 
-(defn one?
+(defn singleton?
   "returns true if the supplied column is of length one"
   [coll]
   (= (count coll) 1))
@@ -77,7 +77,7 @@
   [player a-old a-new]
   (let [bool-vec (map = a-old a-new)
         false-vec (filter false? bool-vec)]
-    (if (one? false-vec)
+    (if (singleton? false-vec)
       (not (nth bool-vec player))
       false)))
 
@@ -140,3 +140,23 @@
 	[game]
    (filter (partial nash-equilibrium? game)
            (action-space game)))
+
+(defn zero-set?
+  "returns true if the supplied set only contains zero, either as a
+  float or integer"
+  [s]
+  (and (singleton? s)
+       (apply zero? s)))
+
+(defn strictly-competitive?
+  "returns true if the supplied game is strictly
+  competitive (i.e. strictly competitive)."
+  [game]
+  ;; `util-fns` is bound to a vector of anonymous functions that are
+  ;; waiting for the player index to return the appropriate util value
+  (let [util-fns (map (fn [a] #(utility game % a))
+                      (action-space game))
+        insert-players (fn [f] (map f (players game)))]
+    (zero-set?
+     (set (map (partial reduce +)
+               (map insert-players util-fns))))))
