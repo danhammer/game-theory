@@ -3,7 +3,7 @@ game-theory
 
 Game theory in Clojure
 
-# core namespace
+## core namespace
 
 The core namespace sets up the components of pure strategy game
 theory, including the specification of a game itself.  A game is
