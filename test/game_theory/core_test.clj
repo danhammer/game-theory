@@ -23,7 +23,6 @@
         [[:strav :strav]   [1, 1]]))
 
 (fact
-  
   "There are two Nash equilbria in a game where the players both want
   to act together, but do not agree on the best action."
   (nash-equilibria BoS) => [[:bach :bach] [:strav :strav]]
@@ -90,3 +89,12 @@
   opposed, such that the game is strictly competitive.  There are no
   Nash equilibria in a strictly competitive game."
   (nash-equilibria matching-pennies) => '())
+
+
+(fact
+  "checks to make sure that certain games are symmetric."
+  (symmetric? prisoners-dilemma) => true
+  (symmetric? dove-hawk) => true
+  (symmetric? matching-pennies) => false
+  (symmetric? BoS) => false
+  (symmetric? coordination-game) => true)

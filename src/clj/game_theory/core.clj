@@ -1,5 +1,6 @@
 (ns game-theory.core
-  (:require [clojure.contrib.combinatorics :as combo]))
+  (:require [clojure.contrib.combinatorics :as combo]
+            [incanter.core :as i]))
 
 (defn utility-table
   "Given the elements in a game, appropriately structured, returns a
@@ -149,8 +150,7 @@
        (apply zero? s)))
 
 (defn strictly-competitive?
-  "returns true if the supplied game is strictly
-  competitive (i.e. strictly competitive)."
+  "returns true if the supplied game is strictly competitive (zerosum)"
   [game]
   ;; `util-fns` is bound to a vector of anonymous functions that are
   ;; waiting for the player index to return the appropriate util value
@@ -160,3 +160,31 @@
     (zero-set?
      (set (map (partial reduce +)
                (map insert-players util-fns))))))
+
+(defn same-actions?
+  "returns true if all players have the same available actions.  note
+  that order matters, here."
+  [game]
+  (singleton?
+   (set (actions game))))
+
+(defn reverse-actions
+  "returns a list of action profiles where the order of each action
+  profile is reversed."
+  [& actions]
+  (apply map reverse actions))
+
+(defn identical-lists?
+  "returns true if the supplied lists are identical"
+  [l1 l2]
+  (every? true? (map == l1 l2)))
+
+(defn symmetric?
+  "returns true if the supplied two-person game is symmetric"
+  [game]
+  {:pre [(= 2 (count (players game)))]}
+  (let [aspace (action-space game)
+        p1-util (map (partial utility game 0) aspace)
+        p2-util (map (partial utility game 1) (reverse-actions aspace))]
+    (and (same-actions? game)
+         (identical-lists? p1-util p2-util))))
