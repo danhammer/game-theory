@@ -82,12 +82,6 @@
       (not (nth bool-vec player))
       false)))
 
-(defn limited-profiles
-  "accepts a game, player index, and the action of that player;
-  returns all action profiles such that the player plays the specified
-  action"
-  [game player action])
-
 (defn recursive-true?
   "accepts a nested collection where every element, no matter what
   level of nesting, is a boolean; returns true iff all elements are
@@ -188,3 +182,11 @@
         p2-util (map (partial utility game 1) (reverse-actions aspace))]
     (and (same-actions? game)
          (identical-lists? p1-util p2-util))))
+
+(defn maximinimizer?
+  [game player action]
+  (let [aspace (action-space game)
+        util (fn [a] (utility game player))
+        spec-action? (fn [a] (= (nth a player) action))]
+    (>= (reduce min (map util (filter spec-action? aspace)))
+        (reduce min (map util aspace)))))
