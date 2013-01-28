@@ -27,7 +27,7 @@
 
 (defn game
   "returns a game from the number of players, the strategies for each
-   player, and the elements that define the utility function."
+  player, and the elements that define the utility function."
   [N A & game-elements]
   {:players (range N)
    :actions A
@@ -54,7 +54,7 @@
 
 (defn action-space
   "returns a sequence of all the action combinations or action
-	profiles possible in a given game."
+  profiles possible in a given game."
   [game]
   (apply combo/cartesian-product (actions game)))
 
