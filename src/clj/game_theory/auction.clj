@@ -10,17 +10,26 @@
   (:require [clojure.contrib.combinatorics :as combo]
             [incanter.core :as i]))
 
-(def v [30 20 10])
-
-(defn bid-range->key
+(defn range->key
+  "accepts an integer value and returns a sequence of integer-valued
+  keys up through the supplied value"
   [N]
   (map (comp keyword str)
        (range (inc N))))
 
-(defn key->int [k]
+(defn key->int
+  "accepts an integer key (e.g., :5) and returns the integer value"
+  [k]
   (read-string (name k)))
 
 (defn util-schedule
+  "accepts a vector of valuations and a strategy profile and returns
+  the payoffs associated with that particular strategy profile.  Note
+  that this particular payoff schedule corresponds to a first-price
+  auction.
+
+  Example usage:
+    (util-schedule [30 20 10] [:26 :19 :7]) => [4 0 0]"
   [value-vector strategy-profile]
   (let [[v0 v1 v2] value-vector
         [b0 b1 b2] (map key->int strategy-profile)
@@ -31,25 +40,33 @@
      (= b2 mx) [0 0 (- v2 b2)])))
 
 (defn strategy-pair
+  "accepts a strategy profile and returns the strategy profile and
+  associated utility schedule, prepared for immediately input into a
+  game specification"
   [strategy-profile]
   [strategy-profile (util-schedule strategy-profile)])
 
 (defn game-elements
+  "Sets up the game elements associated with a first-price auction"
   [value-vector]
   (let [s-pair (fn [x] [(vec x) (util-schedule value-vector x)])
         strategies (apply combo/cartesian-product
-                          (map bid-range->key value-vector))]
+                          (map range->key value-vector))]
     (vec (map s-pair strategies))))
 
-(def first-price-auction
-  (let [strategies (vec (map (comp vec bid-range->key) v))]
+(defn first-price-auction
+  "returns a first price auction, using the supplied vector of values
+  as the starting point"
+  [& {:keys [v] :or [v [30 20 10]]}]
+  (let [strategies (vec (map (comp vec range->key) v))]
     (apply game 3
            strategies
            (game-elements v))))
 
 ;; (def x (nash-equilibria first-price-auction))
-;; (first x) => (:19 :19 :0)
+
 ;; (count x) => 22
+
 ;; ((:19 :19 :0)
 ;;  (:19 :19 :1)
 ;;  (:19 :19 :2)
