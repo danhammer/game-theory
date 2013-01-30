@@ -1,9 +1,6 @@
 (ns game-theory.auction
   "Consider the auction with 3 players, who value the object according
-  to the schedule:
-
-  v = [30 20 10]
-
+  to the supplied schedule (e.g., [30 20 10] for a 3-player game).
   The bids are limited to whole-dollar amounts, such that B = 1, 2, 3,
   ... and no player will ever bid more than they value the object."
   (:use game-theory.core)
@@ -89,3 +86,7 @@
 ;;  (:20 :20 :8)
 ;;  (:20 :20 :9)
 ;;  (:20 :20 :10))
+
+(defn double-auction-payoff
+  [& {:keys [bidder-value seller-value] :or [bidder-value 20 seller-value 10]}]
+  bidder-value)

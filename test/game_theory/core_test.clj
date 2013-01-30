@@ -98,3 +98,32 @@
   (symmetric? matching-pennies) => false
   (symmetric? BoS) => false
   (symmetric? coordination-game) => true)
+
+
+(def development-game
+  (game 2
+        [[:lend :dont-lend]
+         [:repay :dont-repay]]
+
+        [[:lend :repay]           [3, 7]]
+        [[:lend :dont-repay]      [-10, 20]]
+        [[:dont-lend :repay]      [0, 0]]
+        [[:dont-lend :dont-repay] [0, 0]]))
+
+(fact
+  "Just the fact that the borrower could walk away prevents the
+opportunity to lend"
+  (nash-equilibria development-game) => [[:dont-lend :dont-repay]])
+
+(def development-game-collateral
+  (game 2
+        [[:lend :dont-lend]
+         [:repay :dont-repay]]
+
+        [[:lend :repay]           [3, 7]]
+        [[:lend :dont-repay]      [2, 6]]
+        [[:dont-lend :repay]      [0, 0]]
+        [[:dont-lend :dont-repay] [0, 0]]))
+
+(fact
+  (nash-equilibria development-game-collateral) => [[:lend :repay]])
